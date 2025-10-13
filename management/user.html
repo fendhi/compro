@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrindPOS - Manajemen User</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Container utama -->
+  <div class="flex h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-64 text-white flex flex-col border-r-2 border-white" style="background-color: #00718F;">
+      <div class="p-5 text-2xl font-bold border-b-2 border-white flex items-center justify-center">
+        <img src="../logo.png" alt="OrindPOS Logo" class="h-12 w-auto" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <span style="display:none;">OrindPOS</span>
+      </div>
+
+      <nav class="flex-1 p-3 space-y-1">
+        <a href="../dashboard/index.html" class="flex items-center gap-2 p-3 rounded-md border border-white/30 hover:bg-white hover:text-gray-800 transition-colors" style="background-color: rgba(0, 113, 143, 0.5);">
+          <span>🏠</span> <span>Dashboard</span>
+        </a>
+
+        <a href="../transaksi/index.html" class="flex items-center gap-2 p-3 rounded-md border border-white/30 hover:bg-white hover:text-gray-800 transition-colors" style="background-color: rgba(0, 113, 143, 0.5);">
+          <span>💳</span> <span>Transaksi</span>
+        </a>
+
+        <div class="border border-white/30 rounded-md">
+          <button onclick="toggleDropdown('masterDataDropdown')" class="flex justify-between items-center w-full p-3 rounded-md hover:bg-white hover:text-gray-800 transition-colors" style="background-color: rgba(0, 113, 143, 0.5);">
+            <span class="flex items-center gap-2">
+              <span>🗃️</span> Master Data
+            </span>
+            <span id="masterDataArrow">▾</span>
+          </button>
+          <div id="masterDataDropdown" class="hidden pl-10 flex-col gap-1 text-sm mt-1 pb-2">
+            <a href="../master-data/barang.html" class="inline-block w-fit py-0.5 px-1.5 rounded hover:bg-white hover:text-gray-800 transition-colors">Barang</a>
+            <a href="../master-data/kategori.html" class="inline-block w-fit py-0.5 px-1.5 rounded hover:bg-white hover:text-gray-800 transition-colors">Kategori</a>
+          </div>
+        </div>
+
+        <div class="border border-white/30 rounded-md">
+          <button onclick="toggleDropdown('laporanDropdown')" class="flex justify-between items-center w-full p-3 rounded-md hover:bg-white hover:text-gray-800 transition-colors" style="background-color: rgba(0, 113, 143, 0.5);">
+            <span class="flex items-center gap-2">
+              <span>📊</span> Laporan
+            </span>
+            <span id="laporanArrow">▾</span>
+          </button>
+          <div id="laporanDropdown" class="hidden pl-10 flex-col gap-1 text-sm mt-1 pb-2">
+            <a href="../laporan/harian.html" class="inline-block w-fit py-0.5 px-1.5 rounded hover:bg-white hover:text-gray-800 transition-colors">Laporan Harian</a>
+            <a href="../laporan/bulanan.html" class="inline-block w-fit py-0.5 px-1.5 rounded hover:bg-white hover:text-gray-800 transition-colors">Laporan Bulanan</a>
+          </div>
+        </div>
+
+        <div class="border border-white/30 rounded-md">
+          <button onclick="toggleDropdown('managementDropdown')" class="flex justify-between items-center w-full p-3 rounded-md hover:bg-white hover:text-gray-800 transition-colors" style="background-color: rgba(0, 113, 143, 0.5);">
+            <span class="flex items-center gap-2">
+              <span>⚙️</span> Management
+            </span>
+            <span id="managementArrow">▾</span>
+          </button>
+          <div id="managementDropdown" class="flex pl-10 flex-col gap-1 text-sm mt-1 pb-2">
+            <a href="../management/user.html" class="inline-block w-fit py-0.5 px-1.5 rounded hover:bg-white hover:text-gray-800 transition-colors">Manajemen User</a>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 bg-gray-100 overflow-auto">
+      <!-- Header -->
+      <header class="flex justify-between items-center bg-gray-50 px-8 py-4 shadow-sm border-b-2 border-white">
+        <h1 class="text-xl font-semibold" style="color: #00718F;">MANAJEMEN USER</h1>
+        <button class="text-white px-4 py-2 rounded-md hover:opacity-90 border-2 border-white" style="background-color: #00718F;">Logout</button>
+      </header>
+
+      <!-- Konten utama -->
+      <section class="p-8 space-y-6">
+        <div class="bg-white shadow-md rounded-md p-6 border-2 border-gray-200">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold" style="color: #00718F;">Manajemen User</h2>
+            <button onclick="openModal('modalTambahUser')" class="text-white px-4 py-2 rounded-md hover:opacity-90" style="background-color: #00718F;">+ Tambah User</button>
+          </div>
+          <p class="text-gray-600 mb-4">Kelola user dan hak akses sistem Anda di sini.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse">
+              <thead>
+                <tr class="bg-gray-100">
+                  <th class="border border-gray-300 px-4 py-2 text-left">Username</th>
+                  <th class="border border-gray-300 px-4 py-2 text-left">Nama Lengkap</th>
+                  <th class="border border-gray-300 px-4 py-2 text-left">Role</th>
+                  <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
+                  <th class="border border-gray-300 px-4 py-2 text-left">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="5" class="border border-gray-300 px-4 py-8 text-center text-gray-500">Belum ada data user</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal Tambah User -->
+  <div id="modalTambahUser" class="hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+      <!-- Header Modal -->
+      <div class="flex justify-between items-center p-6 border-b" style="background-color: #00718F;">
+        <h3 class="text-xl font-semibold text-white">Tambah User Baru</h3>
+        <button onclick="closeModal('modalTambahUser')" class="text-white hover:text-gray-200 text-2xl">&times;</button>
+      </div>
+      
+      <!-- Body Modal -->
+      <div class="p-6">
+        <form id="formTambahUser">
+          <!-- Username -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-medium mb-2">Username</label>
+            <input type="text" name="username" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50" placeholder="Masukkan username" required>
+          </div>
+          
+          <!-- Nama Lengkap -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-medium mb-2">Nama Lengkap</label>
+            <input type="text" name="fullname" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50" placeholder="Masukkan nama lengkap" required>
+          </div>
+          
+          <!-- Email -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-medium mb-2">Email</label>
+            <input type="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50" placeholder="email@example.com" required>
+          </div>
+          
+          <!-- Password -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-medium mb-2">Password</label>
+            <input type="password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50" placeholder="Masukkan password" required>
+          </div>
+          
+          <!-- Status -->
+          <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-medium mb-2">Status</label>
+            <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50" required>
+              <option value="aktif">Aktif</option>
+              <option value="nonaktif">Non-Aktif</option>
+            </select>
+          </div>
+          
+          <!-- Buttons -->
+          <div class="flex justify-end gap-3">
+            <button type="button" onclick="closeModal('modalTambahUser')" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">
+              Batal
+            </button>
+            <button type="submit" class="px-4 py-2 text-white rounded-md hover:opacity-90 transition-opacity" style="background-color: #00718F;">
+              Simpan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleDropdown(dropdownId) {
+      const dropdown = document.getElementById(dropdownId);
+      if (dropdown.classList.contains('hidden')) {
+        dropdown.classList.remove('hidden');
+        dropdown.classList.add('flex');
+      } else {
+        dropdown.classList.remove('flex');
+        dropdown.classList.add('hidden');
+      }
+    }
+
+    // Modal functions
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.remove('flex');
+      modal.classList.add('hidden');
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      if (event.target.classList.contains('bg-opacity-50')) {
+        const modals = document.querySelectorAll('[id^="modal"]');
+        modals.forEach(modal => {
+          modal.classList.remove('flex');
+          modal.classList.add('hidden');
+        });
+      }
+    }
+
+    // Handle form submit
+    document.addEventListener('DOMContentLoaded', function() {
+      const formTambahUser = document.getElementById('formTambahUser');
+      if (formTambahUser) {
+        formTambahUser.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const formData = new FormData(this);
+          const userData = {
+            username: formData.get('username'),
+            fullname: formData.get('fullname'),
+            email: formData.get('email'),
+            password: formData.get('password'),
+            status: formData.get('status')
+          };
+          
+          console.log('User data:', userData);
+          alert('User berhasil ditambahkan! (Data akan diproses di backend)');
+          
+          closeModal('modalTambahUser');
+          this.reset();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrindPOS - Data Barang</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Container utama -->
+  <div class="flex h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-64 text-white flex flex-col border-r-2 border-white" style="background-color: #00718F;">
+      <div class="p-5 text-2xl font-bold border-b-2 border-white flex items-center justify-center">
+        <img src="../logo.png" alt="OrindPOS Logo" class="h-12 w-auto" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <span style="display:none;">OrindPOS</span>
+      </div>
+
+      <nav class="flex-1 p-3 space-y-1">
+        <a href="../dashboard/index.html" class="flex items-center gap-2 p-3 rounded-md border border-white/30 hover:bg-white hover:text-gray-800 transition-colors" style="background-color: rgba(0, 113, 143, 0.5);">
+          <span>🏠</span> <span>Dashboard</span>
+        </a>
+
+        <a href="../transaksi/index.html" class="flex items-center gap-2 p-3 rounded-md border border-white/30 hover:bg-white hover:text-gray-800 transition-colors" style="background-color: rgba(0, 113, 143, 0.5);">
+          <span>💳</span> <span>Transaksi</span>
+        </a>
+
+        <div class="border border-white/30 rounded-md">
+          <button onclick="toggleDropdown('masterDataDropdown')" class="flex justify-between items-center w-full p-3 rounded-md hover:bg-white hover:text-gray-800 transition-colors" style="background-color: rgba(0, 113, 143, 0.5);">
+            <span class="flex items-center gap-2">
+              <span>🗃️</span> Master Data
+            </span>
+            <span id="masterDataArrow">▾</span>
+          </button>
+          <div id="masterDataDropdown" class="flex pl-10 flex-col gap-1 text-sm mt-1 pb-2">
+            <a href="../master-data/barang.html" class="inline-block w-fit py-0.5 px-1.5 rounded hover:bg-white hover:text-gray-800 transition-colors">Barang</a>
+            <a href="../master-data/kategori.html" class="inline-block w-fit py-0.5 px-1.5 rounded hover:bg-white hover:text-gray-800 transition-colors">Kategori</a>
+          </div>
+        </div>
+
+        <div class="border border-white/30 rounded-md">
+          <button onclick="toggleDropdown('laporanDropdown')" class="flex justify-between items-center w-full p-3 rounded-md hover:bg-white hover:text-gray-800 transition-colors" style="background-color: rgba(0, 113, 143, 0.5);">
+            <span class="flex items-center gap-2">
+              <span>📊</span> Laporan
+            </span>
+            <span id="laporanArrow">▾</span>
+          </button>
+          <div id="laporanDropdown" class="hidden pl-10 flex-col gap-1 text-sm mt-1 pb-2">
+            <a href="../laporan/harian.html" class="inline-block w-fit py-0.5 px-1.5 rounded hover:bg-white hover:text-gray-800 transition-colors">Laporan Harian</a>
+            <a href="../laporan/bulanan.html" class="inline-block w-fit py-0.5 px-1.5 rounded hover:bg-white hover:text-gray-800 transition-colors">Laporan Bulanan</a>
+          </div>
+        </div>
+
+        <div class="border border-white/30 rounded-md">
+          <button onclick="toggleDropdown('managementDropdown')" class="flex justify-between items-center w-full p-3 rounded-md hover:bg-white hover:text-gray-800 transition-colors" style="background-color: rgba(0, 113, 143, 0.5);">
+            <span class="flex items-center gap-2">
+              <span>⚙️</span> Management
+            </span>
+            <span id="managementArrow">▾</span>
+          </button>
+          <div id="managementDropdown" class="hidden pl-10 flex-col gap-1 text-sm mt-1 pb-2">
+            <a href="../management/user.html" class="inline-block w-fit py-0.5 px-1.5 rounded hover:bg-white hover:text-gray-800 transition-colors">Manajemen User</a>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 bg-gray-100 overflow-auto">
+      <!-- Header -->
+      <header class="flex justify-between items-center bg-gray-50 px-8 py-4 shadow-sm border-b-2 border-white">
+        <h1 class="text-xl font-semibold" style="color: #00718F;">DATA BARANG</h1>
+        <button class="text-white px-4 py-2 rounded-md hover:opacity-90 border-2 border-white" style="background-color: #00718F;">Logout</button>
+      </header>
+
+      <!-- Konten utama -->
+      <section class="p-8 space-y-6">
+        <div class="bg-white shadow-md rounded-md p-6 border-2 border-gray-200">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold" style="color: #00718F;">Data Barang</h2>
+            <button onclick="openModal('modalTambahBarang')" class="text-white px-4 py-2 rounded-md hover:opacity-90" style="background-color: #00718F;">+ Tambah Barang</button>
+          </div>
+          <p class="text-gray-600 mb-4">Kelola data barang Anda di sini.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse">
+              <thead>
+                <tr class="bg-gray-100">
+                  <th class="border border-gray-300 px-4 py-2 text-center">No</th>
+                  <th class="border border-gray-300 px-4 py-2 text-left">Kode Barang</th>
+                  <th class="border border-gray-300 px-4 py-2 text-left">Nama Barang</th>
+                  <th class="border border-gray-300 px-4 py-2 text-left">Kategori</th>
+                  <th class="border border-gray-300 px-4 py-2 text-left">Stok</th>
+                  <th class="border border-gray-300 px-4 py-2 text-left">Harga Beli</th>
+                  <th class="border border-gray-300 px-4 py-2 text-left">Harga Jual</th>
+                  <th class="border border-gray-300 px-4 py-2 text-left">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tableBarang">
+                <!-- Contoh data barang -->
+                <tr>
+                  <td class="border border-gray-300 px-4 py-2 text-center">1</td>
+                  <td class="border border-gray-300 px-4 py-2">BRG001</td>
+                  <td class="border border-gray-300 px-4 py-2">Pensil 2B</td>
+                  <td class="border border-gray-300 px-4 py-2">Alat Tulis</td>
+                  <td class="border border-gray-300 px-4 py-2">50</td>
+                  <td class="border border-gray-300 px-4 py-2">Rp 3.000</td>
+                  <td class="border border-gray-300 px-4 py-2">Rp 5.000</td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <div class="flex gap-2">
+                      <button onclick="detailBarang('BRG001')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm" title="Detail">
+                        📄 Detail
+                      </button>
+                      <button onclick="editBarang('BRG001')" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm" title="Edit">
+                        ✏️ Edit
+                      </button>
+                      <button onclick="hapusBarang('BRG001')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm" title="Hapus">
+                        🗑️ Hapus
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border border-gray-300 px-4 py-2 text-center">2</td>
+                  <td class="border border-gray-300 px-4 py-2">BRG002</td>
+                  <td class="border border-gray-300 px-4 py-2">Buku Tulis</td>
+                  <td class="border border-gray-300 px-4 py-2">Alat Tulis</td>
+                  <td class="border border-gray-300 px-4 py-2">30</td>
+                  <td class="border border-gray-300 px-4 py-2">Rp 7.000</td>
+                  <td class="border border-gray-300 px-4 py-2">Rp 10.000</td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <div class="flex gap-2">
+                      <button onclick="detailBarang('BRG002')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm" title="Detail">
+                        📄 Detail
+                      </button>
+                      <button onclick="editBarang('BRG002')" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm" title="Edit">
+                        ✏️ Edit
+                      </button>
+                      <button onclick="hapusBarang('BRG002')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm" title="Hapus">
+                        🗑️ Hapus
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal Tambah Barang -->
+  <div id="modalTambahBarang" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+      <!-- Header Modal -->
+      <div class="flex justify-between items-center p-6 border-b" style="background-color: #00718F;">
+        <h3 class="text-xl font-semibold text-white">Tambah Barang Baru</h3>
+        <button onclick="closeModal('modalTambahBarang')" class="text-white hover:text-gray-200 text-2xl">&times;</button>
+      </div>
+      
+      <!-- Body Modal -->
+      <div class="p-6">
+        <form id="formTambahBarang">
+          <!-- Kode Barang -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-medium mb-2">Kode Barang</label>
+            <input type="text" name="kode_barang" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50" placeholder="Contoh: BRG001" required>
+          </div>
+          
+          <!-- Nama Barang -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-medium mb-2">Nama Barang</label>
+            <input type="text" name="nama_barang" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50" placeholder="Masukkan nama barang" required>
+          </div>
+          
+          <!-- Kategori -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-medium mb-2">Kategori</label>
+            <select name="kategori" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50" required>
+              <option value="">Pilih Kategori</option>
+              <option value="makanan">Makanan</option>
+              <option value="minuman">Minuman</option>
+              <option value="elektronik">Elektronik</option>
+              <option value="alat_tulis">Alat Tulis</option>
+              <option value="lainnya">Lainnya</option>
+            </select>
+          </div>
+          
+          <!-- Stok -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-medium mb-2">Stok</label>
+            <input type="number" name="stok" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50" placeholder="0" min="0" required>
+          </div>
+          
+          <!-- Harga Beli -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-medium mb-2">Harga Beli (Rp)</label>
+            <input type="number" name="harga_beli" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50" placeholder="0" min="0" required>
+          </div>
+          
+          <!-- Harga Jual -->
+          <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-medium mb-2">Harga Jual (Rp)</label>
+            <input type="number" name="harga_jual" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50" placeholder="0" min="0" required>
+          </div>
+          
+          <!-- Buttons -->
+          <div class="flex justify-end gap-3">
+            <button type="button" onclick="closeModal('modalTambahBarang')" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">
+              Batal
+            </button>
+            <button type="submit" class="px-4 py-2 text-white rounded-md hover:opacity-90 transition-opacity" style="background-color: #00718F;">
+              Simpan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleDropdown(dropdownId) {
+      const dropdown = document.getElementById(dropdownId);
+      if (dropdown.classList.contains('hidden')) {
+        dropdown.classList.remove('hidden');
+        dropdown.classList.add('flex');
+      } else {
+        dropdown.classList.remove('flex');
+        dropdown.classList.add('hidden');
+      }
+    }
+
+    // Modal functions
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      if (event.target.classList.contains('bg-opacity-50')) {
+        const modals = document.querySelectorAll('[id^="modal"]');
+        modals.forEach(modal => modal.classList.add('hidden'));
+      }
+    }
+
+    // Handle form submit
+    document.addEventListener('DOMContentLoaded', function() {
+      const formTambahBarang = document.getElementById('formTambahBarang');
+      if (formTambahBarang) {
+        formTambahBarang.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const formData = new FormData(this);
+          const barangData = {
+            kode_barang: formData.get('kode_barang'),
+            nama_barang: formData.get('nama_barang'),
+            kategori: formData.get('kategori'),
+            stok: formData.get('stok'),
+            harga_beli: formData.get('harga_beli'),
+            harga_jual: formData.get('harga_jual')
+          };
+          
+          console.log('Barang data:', barangData);
+          alert('Barang berhasil ditambahkan! (Data akan diproses di backend)');
+          
+          closeModal('modalTambahBarang');
+          this.reset();
+        });
+      }
+    });
+
+    // Fungsi aksi untuk barang
+    function detailBarang(kodeBarang) {
+      alert('Menampilkan detail barang: ' + kodeBarang + '\n\n(Fungsi ini akan menampilkan modal detail barang)');
+      console.log('Detail barang:', kodeBarang);
+    }
+
+    function editBarang(kodeBarang) {
+      alert('Mengedit barang: ' + kodeBarang + '\n\n(Fungsi ini akan membuka form edit barang)');
+      console.log('Edit barang:', kodeBarang);
+    }
+
+    function hapusBarang(kodeBarang) {
+      if (confirm('Apakah Anda yakin ingin menghapus barang: ' + kodeBarang + '?')) {
+        alert('Barang ' + kodeBarang + ' berhasil dihapus!\n\n(Data akan dihapus dari backend)');
+        console.log('Hapus barang:', kodeBarang);
+      }
+    }
+  </script>
+</body>
+</html>
