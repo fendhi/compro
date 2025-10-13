@@ -25,7 +25,13 @@ class BarangController extends Controller
             'stok' => 'required|integer|min:0',
         ]);
 
-        Barang::create($request->all());
+        // Auto-generate kode barang (BRG + timestamp + random)
+        $kodeBarang = 'BRG' . date('Ymd') . strtoupper(substr(md5(uniqid()), 0, 4));
+        
+        $data = $request->all();
+        $data['kode_barang'] = $kodeBarang;
+        
+        Barang::create($data);
 
         return redirect()->route('barang.index')->with('success', 'Barang berhasil ditambahkan');
     }

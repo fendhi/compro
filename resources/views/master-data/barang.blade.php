@@ -97,6 +97,10 @@
     function closeModal(modalId) {
         document.getElementById(modalId).classList.add('hidden');
     }
+    
+    function editBarang(id) {
+        alert('Fitur edit sedang dalam pengembangan. Silakan hapus dan tambah ulang data untuk sementara.');
+    }
 </script>
 @endpush
 @endsection
