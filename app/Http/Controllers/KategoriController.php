@@ -7,17 +7,24 @@ use Illuminate\Http\Request;
 
 class KategoriController extends Controller
 {
+    /**
+     * 🔒 RBAC: Kasir READ ONLY, Owner & Admin FULL ACCESS
+     */
     public function index()
     {
         $kategoris = Kategori::withCount('barangs')->get();
         
-        return view('master-data.kategori', compact('kategoris'));
+        // 🔒 Check user can manage (create/edit/delete)
+        $canManage = auth()->user()->canManageMasterData();
+        
+        return view('master-data.kategori', compact('kategoris', 'canManage'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'nama' => 'required|string|max:255|unique:kategoris,nama',
+            'deskripsi' => 'nullable|string',
         ]);
 
         Kategori::create($request->all());
@@ -29,6 +36,7 @@ class KategoriController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255|unique:kategoris,nama,' . $id,
+            'deskripsi' => 'nullable|string',
         ]);
 
         $kategori = Kategori::findOrFail($id);

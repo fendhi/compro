@@ -1,3 +1,4 @@
+# Laravel specific
 /node_modules
 /public/hot
 /public/storage
@@ -5,11 +6,94 @@
 /vendor
 .env
 .env.backup
+.env.production
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
-npm-debug.log
-yarn-error.log
+auth.json
+
+# IDE and Editor
 /.idea
 /.vscode
+*.swp
+*.swo
+*~
+.project
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# OS specific
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Laravel storage (keep structure, ignore content)
+/storage/framework/cache/data/*
+!/storage/framework/cache/data/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+/storage/app/public/*
+!/storage/app/public/.gitignore
+
+# Build files
+/public/build
+/public/mix-manifest.json
+/public/css/*
+/public/js/app.js
+/public/js/*.js.map
+/public/css/*.css.map
+
+# Dependencies
+composer.phar
+package-lock.json
+yarn.lock
+
+# Testing
+.phpunit.cache
+coverage/
+.coverage
+
+# Backup and temp files
+*.bak
+*.backup
+*.tmp
+*.temp
+*_backup.*
+*_BACKUP.*
+
+# Documentation files (ALL excluded)
+*.md
+*.ps1
+
+# Documentation images (optional - comment out if you want to include them)
+# *.png
+# *.jpg
+# *.jpeg
+# *.gif
+
+# Database dumps
+*.sql
+*.sqlite
+*.db
+
+# Cache
+.php_cs.cache
+.phpunit.result.cache
+bootstrap/cache/*
+!bootstrap/cache/.gitignore

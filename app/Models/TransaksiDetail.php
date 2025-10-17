@@ -14,6 +14,9 @@ class TransaksiDetail extends Model
         'barang_id',
         'jumlah',
         'harga',
+        'diskon_persen',
+        'diskon_amount',
+        'harga_setelah_diskon',
         'subtotal',
     ];
 
@@ -25,5 +28,19 @@ class TransaksiDetail extends Model
     public function barang()
     {
         return $this->belongsTo(Barang::class);
+    }
+
+    // Accessor untuk subtotal setelah diskon item
+    public function getSubtotalSetelahDiskonAttribute()
+    {
+        return $this->harga_setelah_diskon * $this->jumlah;
+    }
+
+    // Method untuk hitung diskon per item
+    public function hitungDiskonItem()
+    {
+        $hargaTotal = $this->harga * $this->jumlah;
+        $diskon = $hargaTotal * ($this->diskon_persen / 100);
+        return $diskon;
     }
 }
