@@ -262,14 +262,36 @@
             @csrf
             <input type="hidden" id="methodField" name="_method" value="">
             
+            <!-- Error Display -->
+            @if ($errors->any())
+                <div class="mb-4 bg-red-50 border-l-4 border-red-500 rounded-lg p-4 shadow-sm">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-exclamation-circle text-red-500 text-xl mt-0.5"></i>
+                        <div class="flex-1">
+                            <h4 class="text-red-800 font-semibold mb-1">Terjadi Kesalahan!</h4>
+                            <ul class="text-red-700 text-sm space-y-1">
+                                @foreach ($errors->all() as $error)
+                                    <li>• {{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="md:col-span-2">
                     <label class="block text-sm font-semibold text-gray-700 mb-2">
                         <i class="fas fa-box text-blue-500"></i> Nama Barang
                     </label>
                     <input type="text" name="nama" id="nama" required 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           placeholder="Masukkan nama barang">
+                           class="w-full px-4 py-2 border @error('nama') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Masukkan nama barang" value="{{ old('nama') }}">
+                    @error('nama')
+                        <p class="text-red-500 text-xs mt-1">
+                            <i class="fas fa-exclamation-triangle"></i> {{ $message }}
+                        </p>
+                    @enderror
                 </div>
                 
                 <div>
@@ -277,12 +299,17 @@
                         <i class="fas fa-tag text-purple-500"></i> Kategori
                     </label>
                     <select name="kategori_id" id="kategori_id" required 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            class="w-full px-4 py-2 border @error('kategori_id') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         <option value="">Pilih Kategori</option>
                         @foreach($kategoris as $kategori)
-                            <option value="{{ $kategori->id }}">{{ $kategori->nama }}</option>
+                            <option value="{{ $kategori->id }}" {{ old('kategori_id') == $kategori->id ? 'selected' : '' }}>{{ $kategori->nama }}</option>
                         @endforeach
                     </select>
+                    @error('kategori_id')
+                        <p class="text-red-500 text-xs mt-1">
+                            <i class="fas fa-exclamation-triangle"></i> {{ $message }}
+                        </p>
+                    @enderror
                 </div>
                 
                 <div>

@@ -75,6 +75,53 @@ class Barang extends Model
         return $query->where('is_active', true);
     }
 
+    // Generate kode barang otomatis berdasarkan kategori
+    public static function generateKodeBarang($kategoriId = null)
+    {
+        // Jika ada kategori_id, ambil nama kategori
+        $namaKategori = null;
+        if ($kategoriId) {
+            $kategori = Kategori::find($kategoriId);
+            $namaKategori = $kategori ? $kategori->nama : null;
+        }
+        
+        // Map kategori ke prefix kode
+        $prefixMap = [
+            'Pod System & Device' => 'POD',
+            'Liquid Saltnic 30ml' => 'LIQ',
+            'Liquid Freebase 60ml' => 'LIQ',
+            'Disposable Vape' => 'DISP',
+            'Pod Cartridge & Coil' => 'COIL',
+            'Battery & Charger' => 'BAT',
+            'Aksesoris Vape' => 'ACC',
+            'Atomizer & Tank' => 'ATM',
+        ];
+        
+        // Cari prefix dari map, default 'BRG' jika tidak ketemu
+        $prefix = $namaKategori ? ($prefixMap[$namaKategori] ?? 'BRG') : 'BRG';
+        
+        // Cari nomor urut terakhir untuk prefix ini
+        $lastBarang = self::where('kode_barang', 'LIKE', $prefix . '%')
+            ->orderBy('kode_barang', 'desc')
+            ->first();
+        
+        if ($lastBarang) {
+            // Extract nomor dari kode terakhir (misal: LIQ014 -> 014)
+            $lastNumber = (int) preg_replace('/[^0-9]/', '', substr($lastBarang->kode_barang, strlen($prefix)));
+            $nextNumber = $lastNumber + 1;
+        } else {
+            $nextNumber = 1;
+        }
+        
+        // Format: PREFIX + nomor 3 digit (POD001, LIQ001, dll)
+        // Khusus untuk DISP dan COIL pakai 2 digit (DISP01, COIL01)
+        if (in_array($prefix, ['DISP', 'COIL', 'BAT', 'ACC', 'ATM'])) {
+            return $prefix . str_pad($nextNumber, 2, '0', STR_PAD_LEFT);
+        } else {
+            return $prefix . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+        }
+    }
+
     // Activity Log Configuration
     public function getActivitylogOptions(): LogOptions
     {

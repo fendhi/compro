@@ -12,6 +12,8 @@ class StockMovement extends Model
     protected $fillable = [
         'barang_id',
         'user_id',
+        'purchase_id',
+        'supplier_id',
         'type',
         'quantity',
         'stok_before',
@@ -34,6 +36,16 @@ class StockMovement extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function purchase()
+    {
+        return $this->belongsTo(Purchase::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
     }
 
     // Accessor untuk display type dalam Bahasa Indonesia

@@ -170,6 +170,33 @@
                 </a>
                 @endif
 
+                <!-- Pembelian Dropdown - OWNER & ADMIN ONLY -->
+                @if(Auth::user()->hasRole('owner', 'admin'))
+                <div>
+                    <button onclick="toggleDropdown('pembelianDropdown')" class="flex justify-between items-center w-full px-4 py-3 rounded-xl hover:bg-white/10 transition-all {{ request()->routeIs('supplier*') || request()->routeIs('purchase*') ? 'bg-white/20' : '' }}">
+                        <span class="flex items-center gap-3">
+                            <i class="fas fa-shopping-bag text-lg w-5"></i>
+                            <span class="menu-text whitespace-nowrap">Pembelian</span>
+                        </span>
+                        <i id="pembelianArrow" class="menu-text fas fa-chevron-down text-sm transition-transform"></i>
+                    </button>
+                    <div id="pembelianDropdown" class="hidden mt-2 ml-12 space-y-1">
+                        <a href="{{ route('supplier.index') }}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white/10 transition-all text-sm {{ request()->routeIs('supplier*') ? 'bg-white/20' : '' }}">
+                            <i class="fas fa-truck text-xs w-4"></i>
+                            <span class="menu-text">Supplier</span>
+                        </a>
+                        <a href="{{ route('purchase.index') }}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white/10 transition-all text-sm {{ request()->routeIs('purchase.index') || request()->routeIs('purchase.show') ? 'bg-white/20' : '' }}">
+                            <i class="fas fa-file-invoice text-xs w-4"></i>
+                            <span class="menu-text">Purchase Order</span>
+                        </a>
+                        <a href="{{ route('purchase.create') }}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white/10 transition-all text-sm {{ request()->routeIs('purchase.create') ? 'bg-white/20' : '' }}">
+                            <i class="fas fa-plus-circle text-xs w-4"></i>
+                            <span class="menu-text">Buat PO Baru</span>
+                        </a>
+                    </div>
+                </div>
+                @endif
+
                 <!-- Keuangan Dropdown - OWNER & ADMIN ONLY -->
                 @if(Auth::user()->canAccessFinancial())
                 <div>

@@ -139,18 +139,35 @@
                             </td>
                             <td class="px-4 py-4 whitespace-nowrap">
                                 @php
+                                    // Badge untuk event
                                     $eventBadge = [
-                                        'created' => ['bg' => 'bg-green-100', 'text' => 'text-green-800', 'icon' => 'fa-plus-circle'],
-                                        'updated' => ['bg' => 'bg-yellow-100', 'text' => 'text-yellow-800', 'icon' => 'fa-edit'],
-                                        'deleted' => ['bg' => 'bg-red-100', 'text' => 'text-red-800', 'icon' => 'fa-trash'],
-                                        'login' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800', 'icon' => 'fa-sign-in-alt'],
-                                        'logout' => ['bg' => 'bg-gray-100', 'text' => 'text-gray-800', 'icon' => 'fa-sign-out-alt']
+                                        'created' => ['bg' => 'bg-green-100', 'text' => 'text-green-800', 'icon' => 'fa-plus-circle', 'label' => 'Created'],
+                                        'updated' => ['bg' => 'bg-yellow-100', 'text' => 'text-yellow-800', 'icon' => 'fa-edit', 'label' => 'Updated'],
+                                        'deleted' => ['bg' => 'bg-red-100', 'text' => 'text-red-800', 'icon' => 'fa-trash', 'label' => 'Deleted'],
+                                        'login' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800', 'icon' => 'fa-sign-in-alt', 'label' => 'Login'],
+                                        'logout' => ['bg' => 'bg-gray-100', 'text' => 'text-gray-800', 'icon' => 'fa-sign-out-alt', 'label' => 'Logout']
                                     ];
-                                    $badge = $eventBadge[$activity->event] ?? ['bg' => 'bg-purple-100', 'text' => 'text-purple-800', 'icon' => 'fa-circle'];
+                                    
+                                    // Badge untuk log_name (module)
+                                    $logNameBadge = [
+                                        'purchase' => ['bg' => 'bg-indigo-100', 'text' => 'text-indigo-800', 'icon' => 'fa-shopping-cart', 'label' => 'Purchase'],
+                                        'barang' => ['bg' => 'bg-emerald-100', 'text' => 'text-emerald-800', 'icon' => 'fa-box', 'label' => 'Barang'],
+                                        'auth' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800', 'icon' => 'fa-user-shield', 'label' => 'Auth'],
+                                        'transaksi' => ['bg' => 'bg-teal-100', 'text' => 'text-teal-800', 'icon' => 'fa-cash-register', 'label' => 'Transaksi'],
+                                    ];
+                                    
+                                    // Prioritas: event > log_name > default
+                                    if ($activity->event && isset($eventBadge[$activity->event])) {
+                                        $badge = $eventBadge[$activity->event];
+                                    } elseif ($activity->log_name && isset($logNameBadge[$activity->log_name])) {
+                                        $badge = $logNameBadge[$activity->log_name];
+                                    } else {
+                                        $badge = ['bg' => 'bg-purple-100', 'text' => 'text-purple-800', 'icon' => 'fa-circle', 'label' => ucfirst($activity->event ?? $activity->log_name ?? '-')];
+                                    }
                                 @endphp
                                 <span class="px-3 py-1 inline-flex items-center gap-1.5 text-xs leading-5 font-semibold rounded-full {{ $badge['bg'] }} {{ $badge['text'] }}">
                                     <i class="fas {{ $badge['icon'] }}"></i>
-                                    {{ ucfirst($activity->event ?? '-') }}
+                                    {{ $badge['label'] }}
                                 </span>
                             </td>
                             <td class="px-4 py-4 whitespace-nowrap">

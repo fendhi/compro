@@ -39,6 +39,19 @@ class BarangController extends Controller
             'stok' => 'required|integer|min:0',
         ]);
 
+        // ✅ CEK DUPLIKAT: Barang dengan nama + kategori sama
+        $existingBarang = Barang::where('nama', $request->nama)
+            ->where('kategori_id', $request->kategori_id)
+            ->first();
+        
+        if ($existingBarang) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors([
+                    'nama' => 'Barang dengan nama "' . $request->nama . '" sudah ada di kategori ini dengan kode: ' . $existingBarang->kode_barang
+                ]);
+        }
+
         // Auto-generate kode barang sesuai kategori
         $kategori = Kategori::find($request->kategori_id);
         $kodeBarang = $this->generateKodeBarang($kategori->nama);
@@ -69,6 +82,21 @@ class BarangController extends Controller
         ]);
 
         $barang = Barang::findOrFail($id);
+        
+        // ✅ CEK DUPLIKAT: Barang lain dengan nama + kategori sama (exclude current barang)
+        $existingBarang = Barang::where('nama', $request->nama)
+            ->where('kategori_id', $request->kategori_id)
+            ->where('id', '!=', $id)  // Exclude barang yang sedang di-edit
+            ->first();
+        
+        if ($existingBarang) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors([
+                    'nama' => 'Barang dengan nama "' . $request->nama . '" sudah ada di kategori ini dengan kode: ' . $existingBarang->kode_barang
+                ]);
+        }
+        
         $kategori = Kategori::find($request->kategori_id);
         
         $data = $request->all();

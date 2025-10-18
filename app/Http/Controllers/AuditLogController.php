@@ -58,6 +58,7 @@ class AuditLogController extends Controller
                 'kategori' => 'App\Models\Kategori',
                 'user' => 'App\Models\User',
                 'transaksi' => 'App\Models\Transaksi',
+                'purchase' => 'App\Models\Purchase',
             ];
             
             if (isset($moduleMap[$request->module])) {
@@ -65,7 +66,7 @@ class AuditLogController extends Controller
             }
         }
 
-        // Filter by log name (untuk login/logout)
+        // Filter by log name (untuk login/logout, purchase, etc)
         if ($request->filled('log_name')) {
             $query->where('log_name', $request->log_name);
         }

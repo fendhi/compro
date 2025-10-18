@@ -12,6 +12,8 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\FinancialController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\PurchaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,6 +112,32 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/keuangan/laporan/arus-kas', [FinancialController::class, 'arusKas'])->name('keuangan.arus-kas');
         Route::get('/keuangan/laporan/laba-rugi/pdf', [FinancialController::class, 'exportLabaRugiPDF'])->name('keuangan.laba-rugi.pdf');
         Route::get('/keuangan/laporan/arus-kas/pdf', [FinancialController::class, 'exportArusKasPDF'])->name('keuangan.arus-kas.pdf');
+    });
+
+    // ========================================
+    // PEMBELIAN (PURCHASE ORDER) - OWNER & ADMIN ONLY
+    // ========================================
+    Route::middleware(['role:owner,admin'])->group(function () {
+        // Supplier Management
+        Route::resource('supplier', SupplierController::class);
+        Route::post('/supplier/{id}/toggle-status', [SupplierController::class, 'toggleStatus'])->name('supplier.toggle-status');
+        
+        // Purchase Order - CRUD
+        Route::resource('purchase', PurchaseController::class);
+        Route::post('/purchase/{id}/submit', [PurchaseController::class, 'submit'])->name('purchase.submit');
+        Route::post('/purchase/{id}/confirm', [PurchaseController::class, 'confirm'])->name('purchase.confirm');
+        Route::post('/purchase/{id}/cancel', [PurchaseController::class, 'cancel'])->name('purchase.cancel');
+        Route::get('/purchase/{id}/pdf', [PurchaseController::class, 'downloadPDF'])->name('purchase.pdf');
+        
+        // API for dynamic form
+        Route::get('/api/barang-for-po', [PurchaseController::class, 'getBarangForPO'])->name('api.barang-for-po');
+        Route::post('/api/store-new-barang', [PurchaseController::class, 'storeNewBarang'])->name('api.store-new-barang');
+    });
+
+    // Approval PO - OWNER ONLY
+    Route::middleware(['role:owner'])->group(function () {
+        Route::post('/purchase/{id}/approve', [PurchaseController::class, 'approve'])->name('purchase.approve');
+        Route::post('/purchase/{id}/reject', [PurchaseController::class, 'reject'])->name('purchase.reject');
     });
 
     // ========================================

@@ -78,6 +78,16 @@ function filterTable() {
 
 // Event Listeners
 document.addEventListener("DOMContentLoaded", function () {
+  // Auto-open modal if there are validation errors
+  const hasErrors = document.querySelector(".bg-red-50");
+  if (hasErrors) {
+    // Check if there's old input data (means form was submitted)
+    const namaInput = document.getElementById("nama");
+    if (namaInput && namaInput.value) {
+      document.getElementById("barangModal").classList.remove("hidden");
+    }
+  }
+
   // Close modal on ESC
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
