@@ -79,10 +79,11 @@
         </button>
         @endif
 
-        <!-- Confirm (Approved + Owner) -->
+        <!-- Confirm (Approved/Partial + Owner/Admin) -->
+        <div id="konfirmasi"></div>
         @if($purchase->canConfirm())
         <button onclick="confirmReceived()" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">
-            <i class="fas fa-box mr-2"></i>
+            <i class="fas fa-box-check mr-2"></i>
             Konfirmasi Terima Barang
         </button>
         @endif

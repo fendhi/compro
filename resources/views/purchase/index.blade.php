@@ -242,14 +242,14 @@
                         <!-- Aksi -->
                         <td class="px-4 py-3">
                             <div class="flex items-center justify-center gap-1">
-                                <!-- View -->
+                                <!-- View (Semua status) -->
                                 <a href="{{ route('purchase.show', $purchase->id) }}" 
                                    class="p-1.5 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition text-xs"
                                    title="Lihat Detail">
                                     <i class="fas fa-eye"></i>
                                 </a>
 
-                                <!-- Edit (Draft only) -->
+                                <!-- Edit (Draft/Rejected only) -->
                                 @if($purchase->canEdit())
                                 <a href="{{ route('purchase.edit', $purchase->id) }}" 
                                    class="p-1.5 bg-yellow-100 text-yellow-600 rounded hover:bg-yellow-200 transition text-xs"
@@ -278,15 +278,6 @@
                                    class="p-1.5 bg-red-100 text-red-600 rounded hover:bg-red-200 transition text-xs"
                                    title="Tolak">
                                     <i class="fas fa-times"></i>
-                                </button>
-                                @endif
-
-                                <!-- Confirm (Approved + Owner) -->
-                                @if($purchase->canConfirm())
-                                <button onclick="confirmReceived({{ $purchase->id }})"
-                                   class="p-1.5 bg-purple-100 text-purple-600 rounded hover:bg-purple-200 transition text-xs"
-                                   title="Konfirmasi Terima">
-                                    <i class="fas fa-box"></i>
                                 </button>
                                 @endif
 
@@ -401,28 +392,6 @@ function showApprovalModal(id, action) {
 function closeModal() {
     document.getElementById('approvalModal').classList.add('hidden');
     document.getElementById('approvalNotes').value = '';
-}
-
-function confirmReceived(id) {
-    if (!confirm('Konfirmasi bahwa barang telah diterima?\nStok akan otomatis bertambah.')) return;
-
-    fetch(`/purchase/${id}/confirm`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification('success', data.message);
-            setTimeout(() => location.reload(), 1000);
-        } else {
-            showNotification('error', data.message);
-        }
-    })
-    .catch(() => showNotification('error', 'Terjadi kesalahan'));
 }
 
 function deletePO(id) {
